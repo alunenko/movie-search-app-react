@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Input } from 'antd';
 import { HeartOutlined } from '@ant-design/icons';
+import SearchBar from './SearchBar';
 
 const Header: React.FC = () => {
   const location = useLocation();
@@ -15,7 +15,7 @@ const Header: React.FC = () => {
         </Link>
       </div>
       <div style={styles.rightSide}>
-        {showSearchBar && <Input.Search placeholder="Search for a movie..." />}
+        {showSearchBar && <SearchBar />} {}
         <Link to="/favorites" style={styles.icon}>
           <HeartOutlined />
         </Link>

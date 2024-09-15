@@ -1,23 +1,40 @@
-import React from 'react';
-import { Input } from 'antd';
+import React, { useState } from 'react';
+import { Input, Spin } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { useGetMoviesByTitleQuery } from '../hooks/useFetchMovies';
 
-const SearchBar: React.FC = () => {
+const { Search } = Input;
+
+interface SearchBarProps {
+  initialQuery?: string;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({ initialQuery = '' }) => {
+  const [query, setQuery] = useState<string>(initialQuery);
+  const navigate = useNavigate();
+
+  const { isLoading, error } = useGetMoviesByTitleQuery(query, {
+    skip: !query,
+  });
+
+  const handleSearch = (value: string) => {
+    setQuery(value);
+    navigate('/search', { state: { query: value } });
+  };
+
   return (
-    <div style={styles.inputGrid}>
-      <Input.Search
-        placeholder="Search for a movie by name. For example: Titanic"
+    <div>
+      <Search
+        placeholder="Search for a movie..."
         enterButton="Search"
         size="large"
-        onSearch={(value) => console.log(value)}
+        onSearch={handleSearch}
+        defaultValue={initialQuery}
       />
+      {isLoading && <Spin tip="Loading..." />}
+      {error && <div>Error fetching movies.</div>}
     </div>
   );
 };
-
-const styles = {
-  inputGrid: {
-    width: '80%'
-  }
-}
 
 export default SearchBar;
