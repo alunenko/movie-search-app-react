@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header.tsx';
 import HomePage from './pages/HomePage.tsx';
 import SearchResultsPage from './pages/SearchResultsPage.tsx';
+import FavoritesPage from './pages/FavoritesPage.tsx';
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/search" element={<SearchResultsPage />} />
-        {/*<Route path="/favorites" element={<FavoritesPage />} />*/}
+        <Route path="/favorites" element={<FavoritesPage />} />
         {/*<Route path="/movie/:id" element={<MovieDetailPage />} />*/}
       </Routes>
     </Router>

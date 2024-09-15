@@ -1,14 +1,17 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { List, Card, Button, Spin } from 'antd';
-import { useDispatch } from 'react-redux';
-import { saveToFavorites } from '../features/movieSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveToFavorites, removeFromFavorites } from '../features/movieSlice';
 import { useGetMoviesByTitleQuery } from '../hooks/useFetchMovies';
+import { RootState } from '../store';
+import { DeleteOutlined } from '@ant-design/icons';
 
 const SearchResultsPage: React.FC = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const query = location.state?.query || '';
+  const favorites = useSelector((state: RootState) => state.movie.favorites);
 
   const { data, error, isLoading } = useGetMoviesByTitleQuery(query);
 
@@ -21,13 +24,19 @@ const SearchResultsPage: React.FC = () => {
     }));
   };
 
+  const handleRemoveFromFavorites = (movieId: string) => {
+    dispatch(removeFromFavorites(movieId));
+  };
+
+  const isFavorite = (movieId: string) => favorites.some(movie => movie.id === movieId);
+
   return (
     <div style={{ padding: '20px' }}>
       <h1>Search Results for "{query}"</h1>
       {isLoading && (
-        <div style={style.spin}>
+        <div style={styles.spin}>
           <Spin />
-          <span style={style.spinText}>Loading...</span>
+          <span style={styles.spinText}>Loading...</span>
         </div>
       )}
       {error && <div>Error fetching movies.</div>}
@@ -39,9 +48,23 @@ const SearchResultsPage: React.FC = () => {
             <List.Item>
               <Card
                 hoverable
-                cover={<img alt={movie.Title} src={movie.Poster} style={style.posterSize}/>}
+                cover={<img alt={movie.Title} src={movie.Poster} style={styles.posterSize} />}
                 actions={[
-                  <Button key="favorite" onClick={() => handleAddToFavorites(movie)}>Add to Favorites</Button>,
+                  isFavorite(movie.imdbID) ? (
+                    <Button
+                      key="remove"
+                      type="primary"
+                      danger
+                      icon={<DeleteOutlined />}
+                      onClick={() => handleRemoveFromFavorites(movie.imdbID)}
+                    >
+                      Remove from Favorites
+                    </Button>
+                  ) : (
+                    <Button key="favorite" onClick={() => handleAddToFavorites(movie)}>
+                      Add to Favorites
+                    </Button>
+                  ),
                 ]}
               >
                 <Card.Meta title={movie.Title} description={movie.Year} />
@@ -54,23 +77,23 @@ const SearchResultsPage: React.FC = () => {
   );
 };
 
-const style = {
+const styles = {
   spin: {
     height: 'calc(100vh - 216px)',
     display: 'flex',
     alignItems: 'center',
     width: '100%',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   spinText: {
-    marginLeft: '10px'
+    marginLeft: '10px',
   },
   posterSize: {
     width: '300px',
     objectFit: 'cover' as 'cover',
     height: '300px',
-    objectPosition: 'top'
+    objectPosition: 'top',
   }
-}
+};
 
 export default SearchResultsPage;

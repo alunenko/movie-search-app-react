@@ -15,9 +15,15 @@ const movieSlice = createSlice({
     saveToFavorites: (state, action) => {
       state.favorites.push(action.payload);
     },
+    removeFromFavorites: (state, action) => {
+      state.favorites = state.favorites.filter(movie => movie.id !== action.payload);
+    }
   },
 });
 
-export const { saveToFavorites } = movieSlice.actions;
+export const {
+  saveToFavorites,
+  removeFromFavorites
+} = movieSlice.actions;
 
 export default movieSlice.reducer;
