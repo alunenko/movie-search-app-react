@@ -25,7 +25,18 @@ const Header: React.FC = () => {
 };
 
 const styles = {
-  header: { display: 'flex', justifyContent: 'space-between', padding: '20px' },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: '20px',
+    position: 'fixed' as 'fixed',
+    top: '0',
+    zIndex: '1',
+    backgroundColor: 'white',
+    width: '100%',
+    boxSizing: 'border-box',
+    height: '80px'
+},
   leftSide: { display: 'flex', alignItems: 'center' },
   title: { fontSize: '24px', fontWeight: 'bold', textDecoration: 'none' },
   rightSide: { display: 'flex', alignItems: 'center' },

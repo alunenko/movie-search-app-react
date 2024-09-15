@@ -24,7 +24,12 @@ const SearchResultsPage: React.FC = () => {
   return (
     <div style={{ padding: '20px' }}>
       <h1>Search Results for "{query}"</h1>
-      {isLoading && <Spin tip="Loading..." />}
+      {isLoading && (
+        <div style={style.spin}>
+          <Spin />
+          <span style={style.spinText}>Loading...</span>
+        </div>
+      )}
       {error && <div>Error fetching movies.</div>}
       {data?.Search && (
         <List
@@ -34,7 +39,7 @@ const SearchResultsPage: React.FC = () => {
             <List.Item>
               <Card
                 hoverable
-                cover={<img alt={movie.Title} src={movie.Poster} />}
+                cover={<img alt={movie.Title} src={movie.Poster} style={style.posterSize}/>}
                 actions={[
                   <Button key="favorite" onClick={() => handleAddToFavorites(movie)}>Add to Favorites</Button>,
                 ]}
@@ -48,5 +53,24 @@ const SearchResultsPage: React.FC = () => {
     </div>
   );
 };
+
+const style = {
+  spin: {
+    height: 'calc(100vh - 216px)',
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    justifyContent: 'center'
+  },
+  spinText: {
+    marginLeft: '10px'
+  },
+  posterSize: {
+    width: '300px',
+    objectFit: 'cover' as 'cover',
+    height: '300px',
+    objectPosition: 'top'
+  }
+}
 
 export default SearchResultsPage;

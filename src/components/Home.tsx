@@ -6,7 +6,7 @@ const styles: { container: React.CSSProperties } = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    minHeight: '100vh',
+    minHeight: 'calc(100vh - 84px)',
     boxSizing: 'border-box'
   },
 };

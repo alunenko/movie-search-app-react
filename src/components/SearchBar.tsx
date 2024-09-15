@@ -24,17 +24,34 @@ const SearchBar: React.FC<SearchBarProps> = ({ initialQuery = '' }) => {
 
   return (
     <div>
-      <Search
-        placeholder="Search for a movie..."
-        enterButton="Search"
-        size="large"
-        onSearch={handleSearch}
-        defaultValue={initialQuery}
-      />
-      {isLoading && <Spin tip="Loading..." />}
-      {error && <div>Error fetching movies.</div>}
+      {isLoading ? (
+        <div style={style.spin}>
+          <Spin />
+          <span style={style.spinText}>Loading...</span>
+        </div>
+      ) : (
+        <Search
+          placeholder="Search for a movie..."
+          enterButton="Search"
+          size="large"
+          onSearch={handleSearch}
+          defaultValue={initialQuery}
+        />
+      )}
+      {error && !isLoading && <div>Error fetching movies.</div>}
     </div>
   );
 };
+
+const style = {
+  spin: {
+    height: '40px',
+    display: 'flex',
+    alignItems: 'center'
+  },
+  spinText: {
+    marginLeft: '10px'
+  }
+}
 
 export default SearchBar;
