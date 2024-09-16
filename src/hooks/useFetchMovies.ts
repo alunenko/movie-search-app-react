@@ -9,7 +9,13 @@ export const movieApi = createApi({
     getMoviesByTitle: builder.query({
       query: (title: string) => `?apikey=${API_KEY}&s=${title}`,
     }),
+    getMovieById: builder.query({
+      query: (id: string) => `?apikey=${API_KEY}&i=${id}&plot=full`,
+    }),
   }),
 });
 
-export const { useGetMoviesByTitleQuery } = movieApi;
+export const {
+  useGetMoviesByTitleQuery,
+  useGetMovieByIdQuery
+} = movieApi;

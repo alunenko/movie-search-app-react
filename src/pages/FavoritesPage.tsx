@@ -4,13 +4,19 @@ import { RootState } from '../store';
 import { Card, Button, Empty, List } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { removeFromFavorites } from '../features/movieSlice';
+import { useNavigate } from 'react-router-dom';
 
 const FavoritesPage: React.FC = () => {
   const dispatch = useDispatch();
   const favorites = useSelector((state: RootState) => state.movie.favorites);
+  const navigate = useNavigate();
 
   const handleRemoveFromFavorites = (id: string) => {
     dispatch(removeFromFavorites(id));
+  };
+
+  const handlePosterClick = (movieId: string) => {
+    navigate(`/movie/${movieId}`);
   };
 
   return (
@@ -24,7 +30,7 @@ const FavoritesPage: React.FC = () => {
               key={movie.id}
               hoverable
               style={styles.card}
-              cover={<img alt={movie.title} src={movie.poster} style={styles.poster} />}
+              cover={<img alt={movie.title} src={movie.poster} style={styles.poster} onClick={() => {handlePosterClick(movie.id)}}/>}
             >
               <Card.Meta title={movie.title} description={`Year: ${movie.year}`} />
               <Button
@@ -52,7 +58,7 @@ const styles = {
     height: 'calc(100vh - 112px)',
   },
   card: { width: '100%' },
-  poster: { width: '300px', height: '300px', objectFit: 'cover' as 'cover', objectPosition: 'top' },
+  poster: { width: '100%', height: '300px', objectFit: 'cover' as 'cover', objectPosition: 'top' },
   removeButton: { marginTop: '10px', width: '100%' },
   empty: {
     minHeight: 'calc(100% - 125px)',

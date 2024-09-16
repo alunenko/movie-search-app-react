@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { List, Card, Button, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveToFavorites, removeFromFavorites } from '../features/movieSlice';
@@ -9,6 +9,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 
 const SearchResultsPage: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const query = location.state?.query || '';
   const favorites = useSelector((state: RootState) => state.movie.favorites);
@@ -30,6 +31,10 @@ const SearchResultsPage: React.FC = () => {
 
   const isFavorite = (movieId: string) => favorites.some(movie => movie.id === movieId);
 
+  const handlePosterClick = (movieId: string) => {
+    navigate(`/movie/${movieId}`);
+  };
+
   return (
     <div style={{ padding: '20px' }}>
       <h1>Search Results for "{query}"</h1>
@@ -48,7 +53,7 @@ const SearchResultsPage: React.FC = () => {
             <List.Item>
               <Card
                 hoverable
-                cover={<img alt={movie.Title} src={movie.Poster} style={styles.posterSize} />}
+                cover={<img alt={movie.Title} src={movie.Poster} style={styles.posterSize} onClick={() => handlePosterClick(movie.imdbID)}/>}
                 actions={[
                   isFavorite(movie.imdbID) ? (
                     <Button
@@ -61,7 +66,7 @@ const SearchResultsPage: React.FC = () => {
                       Remove from Favorites
                     </Button>
                   ) : (
-                    <Button key="favorite" onClick={() => handleAddToFavorites(movie)}>
+                    <Button type="primary" key="favorite" onClick={() => handleAddToFavorites(movie)}>
                       Add to Favorites
                     </Button>
                   ),
@@ -89,7 +94,7 @@ const styles = {
     marginLeft: '10px',
   },
   posterSize: {
-    width: '300px',
+    width: '100%',
     objectFit: 'cover' as 'cover',
     height: '300px',
     objectPosition: 'top',
